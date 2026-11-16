@@ -1,0 +1,128 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Loader from '../components/Loader.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+import '../styles/tokens.css';
+import '../styles/engine.css';
+import '../styles/base.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+}
+
+const {
+  title = `${site.name} | Software Engineer & Full-Stack Developer`,
+  description = site.description,
+  ogType = 'website',
+  noindex = false,
+} = Astro.props;
+
+const baseUrl = Astro.site ?? new URL(site.url);
+const canonicalUrl = new URL(Astro.url.pathname, baseUrl).toString();
+const ogImageUrl = new URL('/og.png', baseUrl).toString();
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  url: baseUrl.toString(),
+  email: `mailto:${site.email}`,
+  jobTitle: site.role,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Barcelona',
+    addressCountry: 'ES',
+  },
+  alumniOf: {
+    '@type': 'CollegeOrUniversity',
+    name: 'Epitech Barcelona',
+  },
+  sameAs: site.socials.map((s) => s.href),
+};
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <link
+      rel="preload"
+      href="/fonts/archivo-100_900-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/general-sans-400-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion');
+      })();
+    </script>
+
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+    <ClientRouter fallback="swap" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <div id="gl" transition:persist aria-hidden="true"></div>
+    <div id="curtain" transition:persist aria-hidden="true">
+      <div class="curtain__panel">
+        <div class="curtain__signal">
+          <span class="curtain__dot"></span>
+          <span class="curtain__trace"></span>
+          <span class="curtain__label">SIGNAL ROUTING</span>
+        </div>
+      </div>
+    </div>
+    <div id="cursor" transition:persist aria-hidden="true">
+      <span data-cursor-label></span>
+    </div>
+
+    <Loader />
+    <Header />
+
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <script>
+      import { start } from '../engine/astro';
+      import { setupMotion } from '../motion/setup';
+      start(setupMotion);
+    </script>
+  </body>
+</html>

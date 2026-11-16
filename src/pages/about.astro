@@ -1,0 +1,100 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, skillsMatrix } from '../data/site';
+---
+<Base
+  title={`About | ${site.name}`}
+  description="Software engineer in Barcelona studying Computer Science at Epitech and co-founding A&A Devs."
+>
+  <section class="about-hero wrap">
+    <p class="kicker">Profile · {site.location}</p>
+    <h1 class="about-hero__title" data-split="lines" data-intro>
+      Building deterministic software across local AI, Swift 6, and POSIX C++.
+    </h1>
+  </section>
+
+  <section class="about-split wrap" aria-labelledby="bio-heading">
+    <div class="about-split__left">
+      <div
+        class="about-stage"
+        role="img"
+        aria-label="Procedural acoustic signal visualization"
+        data-gl="procedural"
+        data-colors="#0d0e12,#1c2540,#0e46d4"
+        data-seed="4.2"
+        data-gl-instant=""
+      >
+        <div class="gl-fallback" aria-hidden="true"></div>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+        <a
+          class="btn"
+          href={site.resumePath}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-fill
+          data-magnetic="0.18"
+        >
+          <span class="btn__fill" aria-hidden="true"></span>
+          <span>Download Resume PDF</span>
+          <span class="btn__arrow" aria-hidden="true">&nearr;</span>
+        </a>
+        <a
+          class="btn-ghost"
+          href="https://github.com/AndreiKocherzhinskiiA"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span>GitHub Profile</span>
+          <span class="btn-ghost__arrow" aria-hidden="true">&nearr;</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="about-split__right">
+      <h2 id="bio-heading" class="kicker">Background &amp; Education</h2>
+      <p class="about-prose" data-reveal="up">
+        I am Andrei Kocherzhinskii, a Barcelona-based software engineer currently pursuing
+        a B.S. in Computer Science at Epitech Barcelona (2024 to 2027) and co-founder of{' '}
+        <a
+          class="inline-link"
+          style="white-space: nowrap; padding-block: 3px;"
+          href={site.studioUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          A&amp;A Devs
+        </a>.
+      </p>
+      <p class="about-prose" data-reveal="up">
+        My engineering work moves directly from low-level memory and protocol guarantees to
+        shipping end-user products: native Swift 6 media software with zero third-party
+        packages, local LLM developer tools backed by automated evaluation harnesses,
+        multi-tenant Next.js hospitality platforms protected by NTAG424 DNA cryptography, and
+        multiplayer C++17 networking loops.
+      </p>
+      <p class="about-prose" data-reveal="up">
+        Before specializing in distributed and local AI tooling, I built and shipped an iOS
+        title from scratch through App Store Connect, balancing stochastic financial market
+        models, localized state graphs, and release telemetry across three languages.
+      </p>
+    </div>
+  </section>
+
+  <section class="skills-table wrap" aria-labelledby="stack-heading">
+    <div class="section-head">
+      <h2 id="stack-heading" class="section-head__title">Technical Stack</h2>
+      <p class="kicker">Languages, runtimes &amp; systems</p>
+    </div>
+
+    <div>
+      {skillsMatrix.map((row) => (
+        <div class="skills-row" data-reveal="up">
+          <h3 class="kicker" style="color: var(--c-fg);">{row.group}</h3>
+          <p style="color: var(--c-muted);">{row.items}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+</Base>

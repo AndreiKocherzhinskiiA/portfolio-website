@@ -1,0 +1,27 @@
+---
+import { site } from '../data/site';
+---
+<div id="loader" aria-hidden="true">
+  <div class="loader__top">
+    <span>AK / SIGNAL INDEX</span>
+    <span>{site.coordinates}</span>
+  </div>
+  <div class="loader__bottom">
+    <div class="loader__inner">
+      <span class="loader__name" data-loader-out>{site.name}</span>
+      <span class="loader__count" data-loader-count data-loader-out>000 HZ</span>
+    </div>
+    <div class="loader__bar-wrap">
+      <div class="loader__bar" data-loader-bar></div>
+    </div>
+  </div>
+</div>
+<script is:inline>
+  if (
+    window.location.pathname !== '/' ||
+    window.matchMedia('(max-width: 767px), (prefers-reduced-motion: reduce)').matches
+  ) {
+    document.getElementById('loader')?.remove();
+    document.documentElement.classList.add('is-loaded');
+  }
+</script>

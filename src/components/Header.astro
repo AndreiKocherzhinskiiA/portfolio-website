@@ -1,0 +1,96 @@
+---
+import { site } from '../data/site';
+
+const pathname = Astro.url.pathname;
+const isWork = pathname === '/' || pathname.startsWith('/work');
+const isAbout = pathname.startsWith('/about');
+
+const navItems = [
+  { label: 'Work', href: '/', current: isWork },
+  { label: 'About', href: '/about/', current: isAbout },
+  { label: 'Contact', href: '#contact', current: false },
+];
+---
+<header class="site-header" data-layer="content">
+  <a
+    class="site-header__brand"
+    href="/"
+    aria-label={`${site.name}, Home`}
+  >
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span>{site.firstName} {site.lastName}</span>
+  </a>
+
+  <nav class="site-header__nav" aria-label="Primary">
+    {navItems.map((item) => (
+      <a
+        class="nav-link"
+        href={item.href}
+        aria-current={item.current ? 'page' : undefined}
+      >
+        <span class="nav-link__roll" data-label={item.label}>
+          <span>{item.label}</span>
+        </span>
+      </a>
+    ))}
+  </nav>
+
+  <button
+    type="button"
+    class="site-header__menu-btn"
+    aria-controls="menu-drawer"
+    aria-expanded="false"
+    data-menu-open
+  >
+    Menu
+  </button>
+
+  <dialog id="menu-drawer" class="menu-drawer" aria-labelledby="menu-drawer-title">
+    <div class="menu-drawer__panel">
+      <div class="menu-drawer__head">
+        <span id="menu-drawer-title" class="footer-kicker">Navigation</span>
+        <button
+          type="button"
+          class="menu-drawer__close"
+          autofocus
+          data-menu-close
+        >
+          Close
+        </button>
+      </div>
+
+      <nav class="menu-drawer__links" aria-label="Mobile navigation">
+        {navItems.map((item, idx) => (
+          <a
+            class="menu-drawer__link"
+            href={item.href}
+            aria-current={item.current ? 'page' : undefined}
+            data-drawer-link
+          >
+            <span>{item.label}</span>
+            <span class="mono" style="font-size: 0.75rem; color: var(--c-muted-dark);">
+              {String(idx + 1).padStart(2, '0')}
+            </span>
+          </a>
+        ))}
+        <a
+          class="menu-drawer__link"
+          href={site.resumePath}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-drawer-link
+        >
+          <span>Resume</span>
+          <span class="mono" style="font-size: 0.75rem; color: var(--c-muted-dark);">PDF</span>
+        </a>
+      </nav>
+
+      <div class="menu-drawer__meta">
+        <a class="inline-link" href={`mailto:${site.email}`} style="width: fit-content;">
+          {site.email}
+        </a>
+        <span>{site.location}</span>
+      </div>
+    </div>
+  </dialog>
+</header>

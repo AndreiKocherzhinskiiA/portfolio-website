@@ -1,0 +1,205 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import { projects, site, type Project } from '../../data/site';
+
+export function getStaticPaths() {
+  return projects.map((project, index) => ({
+    params: { slug: project.slug },
+    props: {
+      project,
+      nextProject: projects[(index + 1) % projects.length],
+    },
+  }));
+}
+
+interface Props {
+  project: Project;
+  nextProject: Project;
+}
+
+const { project, nextProject } = Astro.props;
+---
+<Base
+  title={`${project.title} | ${site.name}`}
+  description={project.summary}
+  ogType="article"
+>
+  <article>
+    <header class="case-hero wrap">
+      <a class="case-back" href="/#work">
+        <span aria-hidden="true">&larr;</span>
+        <span>Back to Selected Systems</span>
+      </a>
+
+      <p class="kicker">
+        {project.index} / {project.discipline} · {project.signalHz}
+      </p>
+
+      <h1 class="case-hero__title" data-split="lines" data-intro>
+        {project.title}
+      </h1>
+
+      <p class="case-hero__summary" data-reveal="fade" data-intro>
+        {project.summary}
+      </p>
+
+      <div class="case-meta" data-reveal="fade" data-intro>
+        <div class="case-meta__item">
+          <span class="kicker">Role</span>
+          <span class="case-meta__val">{project.role.join(', ')}</span>
+        </div>
+        <div class="case-meta__item">
+          <span class="kicker">Period</span>
+          <span class="case-meta__val">{project.period}</span>
+        </div>
+        <div class="case-meta__item">
+          <span class="kicker">Primary Stack</span>
+          <span class="case-meta__val">{project.stack.slice(0, 5).join(', ')}</span>
+        </div>
+        <div class="case-meta__item">
+          <span class="kicker">Status</span>
+          <span class="case-meta__val">{project.status}</span>
+        </div>
+      </div>
+
+      {(project.repoUrl || project.liveUrl) && (
+        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem;" data-reveal="fade" data-intro>
+          {project.liveUrl && (
+            <a
+              class="btn"
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-fill
+              data-magnetic="0.18"
+            >
+              <span class="btn__fill" aria-hidden="true"></span>
+              <span>Visit Live Project</span>
+              <span class="btn__arrow" aria-hidden="true">&nearr;</span>
+            </a>
+          )}
+          {project.repoUrl && (
+            <a
+              class="btn-ghost"
+              href={project.repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>Inspect Repository on GitHub</span>
+              <span class="btn-ghost__arrow" aria-hidden="true">&nearr;</span>
+            </a>
+          )}
+        </div>
+      )}
+    </header>
+
+    <div class="wrap">
+      <div
+        class="case-stage"
+        data-gl=""
+        data-gl-instant=""
+        style={`aspect-ratio: ${project.cover.image.width} / ${project.cover.image.height};`}
+      >
+        <Image
+          src={project.cover.image}
+          widths={[760, 1200, 1600]}
+          sizes="(max-width: 900px) 94vw, 90vw"
+          format="webp"
+          quality={84}
+          alt={project.cover.alt}
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+    </div>
+
+    <div class="case-body wrap">
+      <aside class="case-body__aside">
+        <div class="case-metrics-box" data-reveal="up">
+          <h2 class="kicker">Verified Telemetry</h2>
+          {project.metrics.map((m) => (
+            <div>
+              <span class="metric-val">{m.value}</span>
+              <span class="metric-lbl">{m.label}</span>
+            </div>
+          ))}
+        </div>
+
+        <div class="case-metrics-box" data-reveal="up">
+          <h2 class="kicker">Engineering Highlights</h2>
+          <ul class="case-highlights">
+            {project.highlights.map((item, i) => (
+              <li>
+                <span class="mono" style="color: var(--c-accent);">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </aside>
+
+      <div class="case-body__content">
+        {project.sections.map((section) => (
+          <section class="case-block" data-reveal="up">
+            <h2 class="case-block__h">{section.heading}</h2>
+            <p class="case-block__p">{section.body}</p>
+          </section>
+        ))}
+
+        <section class="case-block" data-reveal="up" style="border-bottom: 0; padding-bottom: 0;">
+          <h2 class="case-block__h">Full Stack</h2>
+          <div class="layer-item__specs">
+            {project.stack.map((tech) => (
+              <span class="spec-chip">{tech}</span>
+            ))}
+          </div>
+        </section>
+      </div>
+    </div>
+
+    {project.gallery.length > 0 && (
+      <section class="case-gallery wrap" aria-label="Project gallery">
+        <h2 class="kicker">Visual Plates</h2>
+        {project.gallery.map((item) => (
+          <figure class="case-gallery__fig" data-reveal="up">
+            <div
+              class="case-gallery__frame"
+              data-gl=""
+              style={`aspect-ratio: ${item.image.width} / ${item.image.height};`}
+            >
+              <Image
+                src={item.image}
+                widths={[720, 1280]}
+                sizes="(max-width: 900px) 94vw, 88vw"
+                format="webp"
+                quality={82}
+                alt={item.alt}
+                loading="lazy"
+              />
+            </div>
+            <figcaption class="case-gallery__cap">{item.caption}</figcaption>
+          </figure>
+        ))}
+      </section>
+    )}
+
+    <nav class="case-next wrap" aria-label="Next case study">
+      <a
+        class="case-next__link"
+        href={`/work/${nextProject.slug}/`}
+        data-cursor="Next"
+      >
+        <span class="kicker">Next Case Study · {nextProject.index}</span>
+        <span class="case-next__title">{nextProject.title} &rarr;</span>
+      </a>
+
+      <a class="btn-ghost" href="/#work">
+        <span>All Systems</span>
+        <span class="btn-ghost__arrow" aria-hidden="true">&rarr;</span>
+      </a>
+    </nav>
+  </article>
+</Base>

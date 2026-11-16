@@ -1,0 +1,92 @@
+---
+import { site } from '../data/site';
+---
+<footer id="contact" class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-top__lead">
+        <p class="footer-kicker">Available for 2026 software engineering internships &amp; product builds</p>
+        <h2 class="footer-top__title" data-split="lines">Send a signal. Build cleanly.</h2>
+        <div class="footer-top__actions">
+          <a
+            class="btn btn--dark"
+            href={`mailto:${site.email}`}
+            data-fill
+            data-magnetic="0.18"
+          >
+            <span class="btn__fill" aria-hidden="true"></span>
+            <span>Email Andrei</span>
+            <span class="btn__arrow" aria-hidden="true">&rarr;</span>
+          </a>
+
+          <button
+            type="button"
+            class="btn btn--dark"
+            data-copy-email={site.email}
+            data-fill
+          >
+            <span class="btn__fill" aria-hidden="true"></span>
+            <span data-copy-label>{site.email}</span>
+          </button>
+
+          <a
+            class="btn btn--dark"
+            href={site.resumePath}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-fill
+          >
+            <span class="btn__fill" aria-hidden="true"></span>
+            <span>Resume PDF</span>
+            <span class="btn__arrow" aria-hidden="true">&nearr;</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-top__meta">
+        <div>
+          <p class="footer-kicker">Base</p>
+          <p>{site.location} · <span class="mono" data-bcn-time>--:--</span> CET</p>
+        </div>
+        <div>
+          <p class="footer-kicker">Education</p>
+          <p>{site.education.school} · {site.education.degree} ({site.education.period})</p>
+        </div>
+        <div>
+          <p class="footer-kicker">Studio</p>
+          <p>
+            Co-founder at{' '}
+            <a
+              class="footer-link footer-link--inline"
+              href={site.studioUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>{site.studio}</span>
+              <span aria-hidden="true">&#8599;</span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-kicker">&copy; 2026 {site.name}</p>
+      <ul class="footer-links">
+        {site.socials.map((s) => (
+          <li>
+            <a
+              class="footer-link"
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {s.label}
+              <span aria-hidden="true" style="margin-left: 0.35rem;">&nearr;</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</footer>
